@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🐰 Valentine ?</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Floating hearts background -->
+  <div class="heart-bg" style="left: 10%; animation-delay: 0s;">💖</div>
+  <div class="heart-bg" style="left: 30%; animation-delay: 1s;">💕</div>
+  <div class="heart-bg" style="left: 50%; animation-delay: 2s;">💘</div>
+  <div class="heart-bg" style="left: 70%; animation-delay: 3s;">💝</div>
+  <div class="heart-bg" style="left: 90%; animation-delay: 4s;">💗</div>
+
+  <div class="container">
+    <div class="bunny">🐰</div>
+    <h1>Tu veux être ma Valentine ? 💘</h1>
+    <p class="subtitle">Choisis bien baby... 😏</p>
+
+    <div id="attemptCounter" class="counter" style="display: none;">
+      Tentative : <span id="count">0</span>/5
+    </div>
+
+    <div class="buttons">
+      <button id="no">Non 😈</button>
+      <button id="yes">Oui 💖</button>
+    </div>
+
+    <div class="message" id="finalMessage"></div>
+    
+    <div class="photo-container" id="photoContainer">
+      <img id="couplePhoto" src="photo.jpg" alt="Nous 💕">
+      <div class="photo-hearts">
+        <span>💖</span><span>💕</span><span>💘</span>
+        <span>💝</span><span>💗</span><span>💓</span>
+      </div>
+    </div>
+
+    <div class="timer" id="timer">⏱️ 0s</div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
