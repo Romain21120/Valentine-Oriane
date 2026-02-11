@@ -92,9 +92,11 @@ function moveYesButton() {
     const yesBtnRect = yesBtn.getBoundingClientRect();
     const noBtnRect = noBtn.getBoundingClientRect();
     
-    // Calculate safe boundaries
-    const maxX = buttonRect.width - yesBtnRect.width - 20;
-    const maxY = buttonRect.height - yesBtnRect.height - 20;
+    // Calculate safe boundaries (en tenant compte de la moitié de la largeur/hauteur du bouton)
+    const halfWidth = yesBtnRect.width / 2;
+    const halfHeight = yesBtnRect.height / 2;
+    const maxX = buttonRect.width - halfWidth - 20;
+    const maxY = buttonRect.height - halfHeight - 20;
     
     let x, y;
     let attempts = 0;
@@ -102,18 +104,18 @@ function moveYesButton() {
     
     // Trouver une position qui ne chevauche PAS le bouton Non
     do {
-      x = Math.random() * maxX;
-      y = Math.random() * maxY;
+      x = Math.random() * maxX + halfWidth;
+      y = Math.random() * maxY + halfHeight;
       
-      // Position absolue du nouveau placement
-      const newLeft = buttonRect.left + x;
-      const newTop = buttonRect.top + y;
+      // Position absolue du nouveau placement (centré)
+      const newLeft = buttonRect.left + x - halfWidth;
+      const newTop = buttonRect.top + y - halfHeight;
       const newRight = newLeft + yesBtnRect.width;
       const newBottom = newTop + yesBtnRect.height;
       
-      // Vérifier si ça chevauche le bouton Non (avec marge de sécurité de 20px)
-      const overlapX = !(newRight + 20 < noBtnRect.left || newLeft - 20 > noBtnRect.right);
-      const overlapY = !(newBottom + 20 < noBtnRect.top || newTop - 20 > noBtnRect.bottom);
+      // Vérifier si ça chevauche le bouton Non (avec marge de sécurité de 30px)
+      const overlapX = !(newRight + 30 < noBtnRect.left || newLeft - 30 > noBtnRect.right);
+      const overlapY = !(newBottom + 30 < noBtnRect.top || newTop - 30 > noBtnRect.bottom);
       
       if (!overlapX || !overlapY) {
         // Pas de chevauchement, on peut utiliser cette position
@@ -126,7 +128,8 @@ function moveYesButton() {
     yesBtn.style.position = 'absolute';
     yesBtn.style.left = x + 'px';
     yesBtn.style.top = y + 'px';
-    yesBtn.style.transform = 'none';
+    // Centrer le bouton sur les coordonnées x,y
+    yesBtn.style.transform = 'translate(-50%, -50%)';
 
     // Create sparkle effect
     createSparkle(yesBtnRect.left + yesBtnRect.width/2, yesBtnRect.top + yesBtnRect.height/2);
