@@ -84,14 +84,38 @@ function moveYesButton() {
 
   const buttonRect = buttons.getBoundingClientRect();
   const yesBtnRect = yesBtn.getBoundingClientRect();
+  const noBtnRect = noBtn.getBoundingClientRect();
   
   // Calculate safe boundaries
-  const maxX = buttonRect.width - yesBtnRect.width;
-  const maxY = buttonRect.height - yesBtnRect.height;
+  const maxX = buttonRect.width - yesBtnRect.width - 20; // Marge de sécurité
+  const maxY = buttonRect.height - yesBtnRect.height - 20;
   
-  // Random position within boundaries
-  const x = Math.random() * maxX;
-  const y = Math.random() * maxY;
+  let x, y;
+  let attempts = 0;
+  const maxAttempts = 50;
+  
+  // Trouver une position qui ne chevauche PAS le bouton Non
+  do {
+    x = Math.random() * maxX;
+    y = Math.random() * maxY;
+    
+    // Position absolue du nouveau placement
+    const newLeft = buttonRect.left + x;
+    const newTop = buttonRect.top + y;
+    const newRight = newLeft + yesBtnRect.width;
+    const newBottom = newTop + yesBtnRect.height;
+    
+    // Vérifier si ça chevauche le bouton Non (avec marge de sécurité de 20px)
+    const overlapX = !(newRight + 20 < noBtnRect.left || newLeft - 20 > noBtnRect.right);
+    const overlapY = !(newBottom + 20 < noBtnRect.top || newTop - 20 > noBtnRect.bottom);
+    
+    if (!overlapX || !overlapY) {
+      // Pas de chevauchement, on peut utiliser cette position
+      break;
+    }
+    
+    attempts++;
+  } while (attempts < maxAttempts);
   
   yesBtn.style.position = 'absolute';
   yesBtn.style.left = x + 'px';
@@ -162,7 +186,7 @@ function showVictory() {
   attemptCounter.style.display = "none";
   
   // Message de victoire
-  finalMessage.innerHTML = "💖 Ouiii !! A l'infini et l'au dela… Je t'aime fort 💖";
+  finalMessage.innerHTML = "💖 Ouiii !! A l'infini et au dela… Je t'aime fort 💖";
   finalMessage.style.display = "block";
   
   // Afficher la photo après 1 seconde
@@ -225,7 +249,7 @@ noBtn.addEventListener("click", (e) => {
   buttons.style.display = "none";
   attemptCounter.style.display = "none";
   
-  finalMessage.innerHTML = "😏 Trop tard… c'était déjà oui dans ton cœur 💖";
+  finalMessage.innerHTML = "💖 je suis sur que c'était déjà oui dans ton cœur 💖";
   finalMessage.style.display = "block";
   
   // Afficher la photo quand même
