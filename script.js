@@ -61,11 +61,12 @@ function vibrate() {
 
 function moveYesButton() {
   if (tries >= maxTries) {
+    // Remettre le bouton en position normale IMMÉDIATEMENT
+    yesBtn.style.position = 'static';
+    yesBtn.style.left = '';
+    yesBtn.style.top = '';
+    yesBtn.style.transform = '';
     yesBtn.textContent = "Clique ici ! 💕";
-    yesBtn.style.position = 'relative';
-    yesBtn.style.left = 'auto';
-    yesBtn.style.top = 'auto';
-    yesBtn.style.transform = 'none';
     canClick = true;
     return;
   }
