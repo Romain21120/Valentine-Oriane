@@ -62,6 +62,10 @@ function vibrate() {
 function moveYesButton() {
   if (tries >= maxTries) {
     yesBtn.textContent = "Clique ici ! 💕";
+    yesBtn.style.position = 'relative';
+    yesBtn.style.left = 'auto';
+    yesBtn.style.top = 'auto';
+    yesBtn.style.transform = 'none';
     canClick = true;
     return;
   }
@@ -75,7 +79,6 @@ function moveYesButton() {
   attemptCounter.style.display = 'block';
 
   // Le bouton grossit à chaque tentative
-  const newScale = 1 + (tries * 0.15);
   yesBtn.style.fontSize = (1.2 + tries * 0.1) + 'em';
   yesBtn.style.padding = (18 + tries * 2) + 'px ' + (35 + tries * 3) + 'px';
 
@@ -83,47 +86,56 @@ function moveYesButton() {
   yesBtn.classList.add('moving');
 
   const buttonRect = buttons.getBoundingClientRect();
-  const yesBtnRect = yesBtn.getBoundingClientRect();
-  const noBtnRect = noBtn.getBoundingClientRect();
   
-  // Calculate safe boundaries
-  const maxX = buttonRect.width - yesBtnRect.width - 20; // Marge de sécurité
-  const maxY = buttonRect.height - yesBtnRect.height - 20;
-  
-  let x, y;
-  let attempts = 0;
-  const maxAttempts = 50;
-  
-  // Trouver une position qui ne chevauche PAS le bouton Non
-  do {
-    x = Math.random() * maxX;
-    y = Math.random() * maxY;
+  // Recalculer la taille du bouton APRÈS l'agrandissement
+  setTimeout(() => {
+    const yesBtnRect = yesBtn.getBoundingClientRect();
+    const noBtnRect = noBtn.getBoundingClientRect();
     
-    // Position absolue du nouveau placement
-    const newLeft = buttonRect.left + x;
-    const newTop = buttonRect.top + y;
-    const newRight = newLeft + yesBtnRect.width;
-    const newBottom = newTop + yesBtnRect.height;
+    // Calculate safe boundaries
+    const maxX = buttonRect.width - yesBtnRect.width - 20;
+    const maxY = buttonRect.height - yesBtnRect.height - 20;
     
-    // Vérifier si ça chevauche le bouton Non (avec marge de sécurité de 20px)
-    const overlapX = !(newRight + 20 < noBtnRect.left || newLeft - 20 > noBtnRect.right);
-    const overlapY = !(newBottom + 20 < noBtnRect.top || newTop - 20 > noBtnRect.bottom);
+    let x, y;
+    let attempts = 0;
+    const maxAttempts = 50;
     
-    if (!overlapX || !overlapY) {
-      // Pas de chevauchement, on peut utiliser cette position
-      break;
-    }
+    // Trouver une position qui ne chevauche PAS le bouton Non
+    do {
+      x = Math.random() * maxX;
+      y = Math.random() * maxY;
+      
+      // Position absolue du nouveau placement
+      const newLeft = buttonRect.left + x;
+      const newTop = buttonRect.top + y;
+      const newRight = newLeft + yesBtnRect.width;
+      const newBottom = newTop + yesBtnRect.height;
+      
+      // Vérifier si ça chevauche le bouton Non (avec marge de sécurité de 20px)
+      const overlapX = !(newRight + 20 < noBtnRect.left || newLeft - 20 > noBtnRect.right);
+      const overlapY = !(newBottom + 20 < noBtnRect.top || newTop - 20 > noBtnRect.bottom);
+      
+      if (!overlapX || !overlapY) {
+        // Pas de chevauchement, on peut utiliser cette position
+        break;
+      }
+      
+      attempts++;
+    } while (attempts < maxAttempts);
     
-    attempts++;
-  } while (attempts < maxAttempts);
-  
-  yesBtn.style.position = 'absolute';
-  yesBtn.style.left = x + 'px';
-  yesBtn.style.top = y + 'px';
-  yesBtn.style.transform = 'none';
+    yesBtn.style.position = 'absolute';
+    yesBtn.style.left = x + 'px';
+    yesBtn.style.top = y + 'px';
+    yesBtn.style.transform = 'none';
 
-  // Create sparkle effect
-  createSparkle(yesBtnRect.left + yesBtnRect.width/2, yesBtnRect.top + yesBtnRect.height/2);
+    // Create sparkle effect
+    createSparkle(yesBtnRect.left + yesBtnRect.width/2, yesBtnRect.top + yesBtnRect.height/2);
+
+    // Remove moving class after positioning
+    setTimeout(() => {
+      yesBtn.classList.remove('moving');
+    }, 50);
+  }, 10);
 
   // Messages taquins plus drôles
   const messages = [
@@ -155,11 +167,6 @@ function moveYesButton() {
     document.body.appendChild(tempMsg);
     setTimeout(() => tempMsg.remove(), 1000);
   }
-
-  // Remove moving class after a brief moment
-  setTimeout(() => {
-    yesBtn.classList.remove('moving');
-  }, 50);
 }
 
 function createConfetti() {
@@ -186,7 +193,7 @@ function showVictory() {
   attemptCounter.style.display = "none";
   
   // Message de victoire
-  finalMessage.innerHTML = "💖 Ouiii !! A l'infini et au dela… Je t'aime fort 💖";
+  finalMessage.innerHTML = "💖 Ouii!!! A l'infini et au dela … Je t'aime fort 💖";
   finalMessage.style.display = "block";
   
   // Afficher la photo après 1 seconde
@@ -249,7 +256,7 @@ noBtn.addEventListener("click", (e) => {
   buttons.style.display = "none";
   attemptCounter.style.display = "none";
   
-  finalMessage.innerHTML = "💖 je suis sur que c'était déjà oui dans ton cœur 💖";
+  finalMessage.innerHTML = "💖 Je suis sur que c'était déjà oui dans ton cœur 💖";
   finalMessage.style.display = "block";
   
   // Afficher la photo quand même
